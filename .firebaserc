@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "saladejuegos-e8002": {
+      "hosting": {
+        "TrabajoPracticoLab4": [
+          "saladejuegos-e8002"
+        ]
+      }
+    }
+  }
+}

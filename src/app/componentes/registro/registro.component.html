@@ -1,0 +1,20 @@
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+<div class="registro">
+  <h2 class="active"> Registro </h2>
+ 
+  <form>
+    <label style="color: rgba(255, 255, 255, 0.616);">Username</label>
+    <input type="text" class="text" name="username" [(ngModel)] = "email">
+    <br> 
+    <br>
+    <label style="color: rgba(255, 255, 255, 0.616);">Password</label>
+    <input type="password" class="text" name="password" [(ngModel)] = "password">
+    <br>
+    <div style="color: #fa3691; padding-left: 5px;">{{error}}</div>
+    <button class="signup" (click) = 'Registro()'>
+      Registro
+    </button>
+    
+  </form>
+</div>

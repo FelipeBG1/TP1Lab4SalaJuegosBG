@@ -1,1 +1,25 @@
-<p>login works!</p>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+<div class="login">
+ 
+  <h2 class="active"> Login </h2>
+  <form>
+    <label style="color: rgba(255, 255, 255, 0.616);">Email</label>
+    <input type="text" class="text" name="username" [(ngModel)] = "email" value='{{this.email}}'>
+    <br> 
+    <br>
+    <label style="color: rgba(255, 255, 255, 0.616);">Password</label>
+    <input type="password" class="text" name="password" [(ngModel)] = "password" value='{{this.password}}'>
+    <br>
+    <div style="color: #fa3691; padding-left: 5px;">{{error}}</div>
+    
+    
+    <button class="signin" (click)='Login()'>
+      Login
+    </button>
+    <button class="signin" (click)='LoginInvitado()'>
+      Login Rápido
+    </button>
+    <a style="cursor: pointer;" [routerLink] = "['/registro']">¿No tiene una cuenta? Registrese</a>
+  </form>
+</div>
