@@ -11,7 +11,7 @@ import { RegistroComponent } from './componentes/registro/registro.component';
 import { ErrorComponent } from './componentes/error/error.component';
 import { AngularFireModule} from '@angular/fire/compat';
 import { AngularFireAuthModule} from '@angular/fire/compat/auth';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
