@@ -1,0 +1,41 @@
+<app-nav></app-nav>
+<div class="container">
+    <div class="row chat-window col-md-12" id="chat_window_1" style="margin-left:10px;">
+        <div class="col-xs-12 col-md-12">
+        	<div class="panel panel-default">
+                <div class="panel-heading top-bar">
+                </div>
+                <div class="panel-body msg_container_base" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                    <div *ngFor="let item of mensajes | async">
+                        <div class="row msg_container base_sent" *ngIf='this.user.userInfo === item.user'>
+                            <div class="col-md-10 col-xs-10">
+                                <div class="messages msg_sent">
+                                    <h6>{{item.user}}</h6>
+                                    <p>{{item.message}}</p>
+                                    <time>{{item.date}}</time>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf='this.user.userInfo !== item.user'>
+                            <div class="row msg_container base_receive">
+                                <div class="col-md-10 col-xs-10">
+                                    <div class="messages msg_receive">
+                                        <h6>{{item.user}}</h6>
+                                        <p>{{item.message}}</p>
+                                        <time>{{item.date}}</time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+<div class="panel-footer">
+    <div class="input-group">
+        <input id="btn-input" type="text" class="form-control input-sm chat_input"  [(ngModel)]="this.mensaje.message" placeholder="Ingrese su mensaje" />
+        <div>
+            <i class="fas fa-play fs-4 ms-2 mt-2" style="width: 20px; height: 20px; cursor: pointer;" (click)="sendMessage()"></i>
+        </div>
+    </div>
+</div>

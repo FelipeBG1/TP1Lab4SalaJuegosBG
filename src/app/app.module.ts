@@ -12,6 +12,12 @@ import { ErrorComponent } from './componentes/error/error.component';
 import { AngularFireModule} from '@angular/fire/compat';
 import { AngularFireAuthModule} from '@angular/fire/compat/auth';
 import { environment } from 'src/environments/environment';
+import { AhorcadoComponent } from './juegos/ahorcado/ahorcado.component';
+import { MayorMenorComponent } from './juegos/mayor-menor/mayor-menor.component';
+import { NavComponent } from './componentes/nav/nav.component';
+import { ChatComponent } from './componentes/chat/chat.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,14 +26,26 @@ import { environment } from 'src/environments/environment';
     LoginComponent,
     QuienSoyComponent,
     RegistroComponent,
-    ErrorComponent
+    ErrorComponent,
+    AhorcadoComponent,
+    MayorMenorComponent,
+    NavComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule],
+    AngularFireAuthModule,
+    ToastrModule.forRoot({
+      timeOut:3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
+    BrowserAnimationsModule,
+  ],
+    
   providers: [],
   bootstrap: [AppComponent]
 })

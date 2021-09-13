@@ -1,0 +1,115 @@
+import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { textChangeRangeIsUnchanged } from 'typescript';
+import { ToastrService } from 'ngx-toastr';
+
+
+@Component({
+  selector: 'app-ahorcado',
+  templateUrl: './ahorcado.component.html',
+  styleUrls: ['./ahorcado.component.css']
+})
+export class AhorcadoComponent implements OnInit {
+
+  letras : any; 
+  
+  palabras : any = ["ELEFANTE","DOCTOR","PROGRAMACION"];
+ 
+  palabraEnProceso : string = "";
+  palabraAAdivinar : string = "";
+  fallos : number;
+  acertadas : number;
+
+  
+  constructor(public firestore : AngularFirestore, private toast : ToastrService) { 
+    this.letras = ["A","B","C","D","E","F","G","H","I",
+    "J","K","L","M","N","Ñ","O","P","Q","R",
+    "S","T","U","V","W","X","Y","Z"];
+    this.fallos = 0;
+    this.acertadas = 0;
+
+    this.inicializarPalabra();
+  }
+
+  ngOnInit(): void {
+  }
+
+  reiniciar()
+  {
+    this.fallos = 0;
+    this.palabraAAdivinar = "";
+    this.palabraEnProceso = "";
+    this.acertadas = 0;
+    this.inicializarPalabra();
+  }
+
+  inicializarPalabra()
+  {
+    let random : number = Math.floor(Math.random() * this.palabras.length);
+    this.palabraAAdivinar = this.palabras[random];
+
+    this.generarEspacios();
+    
+  }
+
+  generarEspacios()
+  {
+    for(let i = 0;i < this.palabraAAdivinar.length; i++)
+    {
+      this.palabraEnProceso += "_";
+    }
+  }
+
+  clicked(letra : string)
+  {
+     if(!this.busqueda(letra))
+     {
+       this.fallos++;
+        if(this.fallos == 6)
+        {
+          this.juegoPerdido();
+        }  
+     }
+     else
+     {
+       if(this.acertadas === this.palabraAAdivinar.length)
+       {
+         this.juegoGanado();
+       }
+     }
+
+     
+  }
+
+  busqueda(letra : string) : boolean
+  {
+    let letraAcertada : boolean = false;
+    for(let i = 0; i < this.palabraAAdivinar.length; i++)
+    {
+      if(this.palabraAAdivinar[i] === letra)
+      {
+        letraAcertada = true;
+        this.palabraEnProceso = this.palabraEnProceso.substring(0,i) + letra + this.palabraEnProceso.substring(i + 1);
+        this.acertadas++;
+      }
+    }
+
+    return letraAcertada;
+  }
+
+  juegoPerdido()
+  {
+    this.toast.error("Has alcanzado el limite de fallos","Has perdido");
+    setTimeout(() => {
+      this.reiniciar();
+    }, 4000);
+  }
+
+  juegoGanado()
+  {
+    this.toast.success("Has adivinado la palabra","Has ganado");
+    setTimeout(() => {
+      this.reiniciar();
+    }, 3500);
+  }
+}
