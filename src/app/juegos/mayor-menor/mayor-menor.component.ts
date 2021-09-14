@@ -74,7 +74,7 @@ export class MayorMenorComponent implements OnInit {
         }
         else
         {
-          this.juegoPerdido("Era menor");
+          this.juegoPerdido("Era menor, su puntaje ha sido de " + this.puntaje + " puntos");
           setTimeout(() => {
             this.cartaInicial = 0;
             this.cartaAComparar = 0;
@@ -93,7 +93,7 @@ export class MayorMenorComponent implements OnInit {
           }
           else
           {
-            this.juegoPerdido("Era mayor");
+            this.juegoPerdido("Era mayor, su puntaje ha sido de " + this.puntaje + " puntos");
             setTimeout(() => {
               this.cartaInicial = 0;
               this.cartaAComparar = 0;

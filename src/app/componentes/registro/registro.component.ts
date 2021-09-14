@@ -46,6 +46,20 @@ export class RegistroComponent implements OnInit {
         {
           this.error = "Error, el email ya se encuentra registrado";
         }
+        else
+        {
+          if(response.code == "auth/weak-password")
+          {
+            this.error = "La contraseña es debil,debe contener al menos 6 caracteres";
+          }
+          else
+          {
+            if(response.code == "auth/invalid-email")
+            {
+              this.error = 'Formato de mail invalido';
+            }
+          }
+        }
       }
     });
   }

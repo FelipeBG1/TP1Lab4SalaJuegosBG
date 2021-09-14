@@ -13,7 +13,7 @@
     </div>
     <br>
     <div id="letterbox">
-        <button class="btn btn-outline-dark m-1" style="margin-right: 10px;" *ngFor="let letra of letras" (click) = "clicked(letra)">{{letra}}</button>
+        <button class="btn btn-outline-dark m-1" style="margin-right: 10px;" *ngFor="let letra of letras" (click) = "clicked(letra)" [disabled] = 'this.disabled'>{{letra}}</button>
     </div>
 
 </div>

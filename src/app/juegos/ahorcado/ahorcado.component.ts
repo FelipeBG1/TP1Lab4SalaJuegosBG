@@ -19,6 +19,7 @@ export class AhorcadoComponent implements OnInit {
   palabraAAdivinar : string = "";
   fallos : number;
   acertadas : number;
+  disabled : boolean = false;
 
   
   constructor(public firestore : AngularFirestore, private toast : ToastrService) { 
@@ -40,6 +41,7 @@ export class AhorcadoComponent implements OnInit {
     this.palabraAAdivinar = "";
     this.palabraEnProceso = "";
     this.acertadas = 0;
+    this.disabled = false;
     this.inicializarPalabra();
   }
 
@@ -100,16 +102,18 @@ export class AhorcadoComponent implements OnInit {
   juegoPerdido()
   {
     this.toast.error("Has alcanzado el limite de fallos","Has perdido");
+    this.disabled = true;
     setTimeout(() => {
       this.reiniciar();
-    }, 4000);
+    }, 2200);
   }
 
   juegoGanado()
   {
     this.toast.success("Has adivinado la palabra","Has ganado");
+    this.disabled = true;
     setTimeout(() => {
       this.reiniciar();
-    }, 3500);
+    }, 2200);
   }
 }
