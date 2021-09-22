@@ -18,6 +18,9 @@ import { NavComponent } from './componentes/nav/nav.component';
 import { ChatComponent } from './componentes/chat/chat.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PreguntadosComponent } from './juegos/preguntados/preguntados.component';
+import { Aproxima2Component } from './juegos/aproxima2/aproxima2.component';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AhorcadoComponent,
     MayorMenorComponent,
     NavComponent,
-    ChatComponent
+    ChatComponent,
+    PreguntadosComponent,
+    Aproxima2Component,
   ],
   imports: [
     BrowserModule,
