@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-mayor-menor',
@@ -8,50 +9,87 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class MayorMenorComponent implements OnInit {
 
-  numerosInicial : number[] = [1,2,3,4,5,6,7,8,9,10,
-                        11,12];
+  cartas : any;
+  cartasRestantes : any;
+  cartaInicial : any;
+  cartaAComparar : any;
+  inicio : boolean = false;
+  puntaje : number;
 
-  numeros : number[] = [];
-  cartaInicial : number = 0;
-  cartaAComparar : number = 0;
-  puntaje : number = 0;
-  inicio : boolean;
-
-  constructor(public toast : ToastrService) 
+  constructor(public toast : ToastrService, public api : ApiService) 
   {
-    this.inicio = false;
+    this.puntaje = 0;
+    this.cartaInicial = {img:'../../../assets/cartas/0.png',value : 0};
+    this.cartaAComparar = {img:'../../../assets/cartas/0.png',value : 0};
+    this.inicializarMazo();
   }
 
   ngOnInit(): void {
   }
 
+  inicializarMazo()
+  {
+    this.api.setearUrl("http://deckofcardsapi.com/api/deck/new/draw/?count=52");
+    this.api.apiLlamada().subscribe((dato : any)=>{
+      this.cartas = dato.cards;
+    });
+  }
+
   inicializarCarta()
   {
-    let random : number = Math.floor(Math.random() * this.numerosInicial.length);
+    let random : number = Math.floor(Math.random() * this.cartas.length);
 
-    this.cartaInicial = this.numerosInicial[random];
+    this.administrar(this.cartas[random],this.cartaInicial);
 
-    this.numeros = this.numerosInicial.filter((numero : number) => numero != this.cartaInicial);
+    this.cartasRestantes = this.cartas.filter((carta : any) => carta != this.cartaInicial);
 
     this.inicio = true;
   }
 
   generarCarta()
   {
-    let random : number = Math.floor(Math.random() * (12 - 1));
+    let random : number = Math.floor(Math.random() * this.cartasRestantes.length);
 
-    this.cartaAComparar = this.numeros[random];
+    this.administrar(this.cartas[random],this.cartaAComparar);
+  }
+
+  administrar(dato : any,carta : any,)
+  {
+    carta.img = dato.image;
+
+    switch(dato.value)
+    {
+        case "ACE":
+          carta.value = 1;
+          break;
+
+        case "JACK":
+          carta.value = 10;
+          break;
+
+        case "QUEEN":
+          carta.value = 11;
+          break;
+
+        case "KING":
+          carta.value = 12; 
+          break;
+
+        default:
+          carta.value = parseInt(dato.value);
+          break; 
+    }
   }
 
   reemplzarCarta()
   {
-    this.numeros = this.numerosInicial.filter((numero : number) => numero != this.cartaAComparar);
+    this.cartasRestantes = this.cartas.filter((carta : any) => carta != this.cartaAComparar);
     setTimeout(() => {
-      this.cartaInicial = this.cartaAComparar;
-      this.cartaAComparar = 0;
-      
+      this.cartaInicial.img = this.cartaAComparar.img;
+      this.cartaInicial.value = this.cartaInicial.value;
+      this.cartaAComparar.img = "../../../assets/cartas/0.png";
+      this.cartaAComparar.value = 0;
     }, 1000);
-
   }
 
   juegoPerdido(mensaje : string)
@@ -59,47 +97,71 @@ export class MayorMenorComponent implements OnInit {
     this.toast.error(mensaje,"Has perdido");
   }
 
+  reiniciar()
+  {
+    this.cartaInicial.img = "../../../assets/cartas/0.png";
+    this.cartaInicial.value = 0;
+    this.cartaAComparar.img = "../../../assets/cartas/0.png";
+    this.cartaAComparar.value = 0;
+    this.puntaje = 0;
+    this.inicio = false;  
+  }
+
   comparar(condicion : number)
   {
     this.generarCarta();
-    console.log(this.cartaAComparar);
 
     switch(condicion)
     {
       case 1:
-        if(this.cartaAComparar > this.cartaInicial)
+        if(this.cartaAComparar.value > this.cartaInicial.value)
         {
           this.puntaje++;
           this.reemplzarCarta();
         }
         else
         {
-          this.juegoPerdido("Era menor, su puntaje ha sido de " + this.puntaje + " puntos");
-          setTimeout(() => {
-            this.cartaInicial = 0;
-            this.cartaAComparar = 0;
-            this.puntaje = 0;
-            this.inicio = false;  
-          }, 3500);
-          
+          if(this.cartaAComparar.value == this.cartaInicial.value)
+          {
+            this.toast.warning("Empate","Igual");
+            setTimeout(() => {
+              this.cartaAComparar.img = "../../../assets/cartas/0.png";
+              this.cartaAComparar.value = 0;     
+            }, 2500);
+          }
+          else
+          {
+            this.juegoPerdido("Era menor, su puntaje ha sido de " + this.puntaje + " puntos");
+            setTimeout(() => {
+              this.reiniciar();
+            }, 2500);       
+          }
         }
         break;
 
         case 2:
-          if(this.cartaAComparar < this.cartaInicial)
+          if(this.cartaAComparar.value < this.cartaInicial.value)
           {
             this.puntaje++;
             this.reemplzarCarta();
           }
           else
           {
-            this.juegoPerdido("Era mayor, su puntaje ha sido de " + this.puntaje + " puntos");
-            setTimeout(() => {
-              this.cartaInicial = 0;
-              this.cartaAComparar = 0;
-              this.puntaje = 0;
-              this.inicio = false; 
-            }, 3000);  
+            if(this.cartaAComparar.value == this.cartaInicial.value)
+            {
+              this.toast.warning("Empate","Igual");
+              setTimeout(() => {
+                this.cartaAComparar.img = "../../../assets/cartas/0.png";
+                this.cartaAComparar.value = 0;     
+              }, 2500);
+            }
+            else
+            {
+              this.juegoPerdido("Era mayor, su puntaje ha sido de " + this.puntaje + " puntos");
+              setTimeout(() => {
+               this.reiniciar();
+              }, 2500);  
+            }
           }
           break;
     }

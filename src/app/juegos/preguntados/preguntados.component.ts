@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Pregunta } from 'src/app/clases/Pregunta';
 import { ToastrService } from 'ngx-toastr';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-preguntados',
@@ -11,34 +12,40 @@ export class PreguntadosComponent implements OnInit {
 
   preguntas = [
     {
-      pregunta: "¿En que fecha se realizó la primer elección presidencial con el voto secreto en Argentina?",
-      opciones: ["1910","1920","1916","1914"],
-      correcta: "1916"
+      pregunta: "¿Cuál es el nombre de este trago?",
+      img: "",
+      opciones: ["Mojito","Avalon","Negroni","Margarita"],
+      correcta: "Avalon"
     },
     {
-      pregunta: "¿Cuál de estas no es una marivilla del mundo moderno?",
-      opciones: ["La Gran Muralla China","Las Cataratas del Iguazú","El Taj Mahal","Petra"],
-      correcta: "Las Cataratas del Iguazú"
+      pregunta: "¿Qúe trago es este?",
+      img: "",
+      opciones: ["Vesper","Butterfly Effect","Mountain Bramble","Shanghai Cocktail"],
+      correcta: "Vesper"
     },
     {
-      pregunta: "¿Qué es la acromatopsia?",
-      opciones: ["La incapacidad de reconocer la tabla cromatica","Percibir objetos con coloracion inexistente","Percibir todos los colores con un tono amarillento","No poder diferenciar entre ciertos colores"],
-      correcta: "La incapacidad de reconocer la tabla cromatica"
+      pregunta: "¿Cuál es este trago?",
+      img: "",
+      opciones: ["Quentin","Lemon drop","Bobby Burns Cocktail","Limeade"],
+      correcta: "Limeade"
     },
     {
-      pregunta: "¿Qué país tiene mas participaciones en la copa mundial de fútbol?",
-      opciones: ["Uruguay","Portugal","Paises Bajos","Inglaterra"],
-      correcta: "Inglaterra"
+      pregunta: "¿Cuál es el nombre de este trago?",
+      img: "",
+      opciones: ["Mary Pickford","Lazy Coconut Paloma","Frosé","New York Lemonade"],
+      correcta: "Frosé"
     },
     {
-      pregunta: "¿Qué película tiene mas premios Oscars?",
-      opciones: ["La lista de Schindler","El Señor de los Anillos: el retorno del Rey","La La Land","Gladiator"],
-      correcta: "El Señor de los Anillos: el retorno del Rey"
+      pregunta: "¿Qué trago es el siguiente?",
+      img: "",
+      opciones: ["Halloween Punch","Kamikaze","Zombie","Zizi Coin-coin"],
+      correcta: "Kamikaze"
     },
     {
-      pregunta: "¿Cuál es el resultado de la siguiente ecuación: 2x/3 + 16/3 = -(4x/2)?",
-      opciones: ["6","-3","3","-2"],
-      correcta: "-2"
+      pregunta: "¿Cómo se le llama al siguiente trago?",
+      img: "",
+      opciones: ["Jackhammer","Ace","Blueberry Mojito","Gagliardo"],
+      correcta: "Jackhammer"
     }
   ]
 
@@ -48,8 +55,19 @@ export class PreguntadosComponent implements OnInit {
   correcta : boolean = false;
   incorrecta : boolean = false;
   
-  constructor(private toast : ToastrService) { 
+  constructor(private toast : ToastrService,public api : ApiService) { 
     this.InicializarPregunta();
+    this.llamarApi();
+    
+   }
+
+   llamarApi()
+   {
+      let url : string = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + this.preguntaActual.correcta;
+      this.api.setearUrl(url);
+      this.api.apiLlamada().subscribe((dato : any)=>{
+      this.preguntaActual.img = dato.drinks[0].strDrinkThumb;
+    });
    }
 
    InicializarPregunta()
@@ -63,6 +81,7 @@ export class PreguntadosComponent implements OnInit {
       this.preguntasRestantes = this.preguntas.filter((pregunta : Pregunta) => pregunta != this.preguntaActual && pregunta != this.preguntaAnterior);
       let random : number = Math.floor(Math.random() * this.preguntasRestantes.length);
       this.preguntaActual = this.preguntasRestantes[random];
+      this.llamarApi();
     }
 
    validarRespuesta(opcion : string)

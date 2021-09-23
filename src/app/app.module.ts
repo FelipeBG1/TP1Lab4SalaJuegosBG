@@ -20,6 +20,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PreguntadosComponent } from './juegos/preguntados/preguntados.component';
 import { Aproxima2Component } from './juegos/aproxima2/aproxima2.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { Aproxima2Component } from './juegos/aproxima2/aproxima2.component';
       preventDuplicates: true,
     }),
     BrowserAnimationsModule,
+    HttpClientModule
   ],
     
   providers: [],
