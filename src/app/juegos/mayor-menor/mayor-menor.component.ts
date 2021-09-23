@@ -29,7 +29,7 @@ export class MayorMenorComponent implements OnInit {
 
   inicializarMazo()
   {
-    this.api.setearUrl("http://deckofcardsapi.com/api/deck/new/draw/?count=52");
+    this.api.setearUrl("https://deckofcardsapi.com/api/deck/new/draw/?count=52");
     this.api.apiLlamada().subscribe((dato : any)=>{
       this.cartas = dato.cards;
     });
